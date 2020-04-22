@@ -19,10 +19,131 @@ if(isset($_FILES['image']))
     }
     else
     {
-        echo "Gavno";
+        echo "Error";
         print $errors;
     }
 }
+
+if(isset($_FILES['zadanie']))
+{
+    $errors = array();
+    $file_name = $_FILES['zadanie']['name'];
+    $file_size = $_FILES['zadanie']['size'];
+    $file_tmp = $_FILES['zadanie']['tmp_name'];
+    $file_type = $_FILES['zadanie']['type'];
+
+
+    $expensions = array("txt", "docx", "doc");
+
+    if(empty($errors) == true)
+    {
+        echo "Success";
+        move_uploaded_file($file_tmp, "zadanie/".$file_name);
+
+    }
+    else
+    {
+        echo "Error";
+        print $errors;
+    }
+}
+
+if(isset($_FILES['text']))
+{
+    $errors = array();
+    $file_name = $_FILES['text']['name'];
+    $file_size = $_FILES['text']['size'];
+    $file_tmp = $_FILES['text']['tmp_name'];
+    $file_type = $_FILES['text']['type'];
+   // $file_ext = strtolower(end(explode('.',$_FILES['text']['name'] )));
+
+    $expensions = array("txt", "docx", "doc");
+
+    if(empty($errors) == true)
+    {
+        echo "Success";
+        move_uploaded_file($file_tmp, "zadanie/".$file_name);
+
+    }
+    else
+    {
+        echo "Error";
+        print $errors;
+    }
+}
+
+if(isset($_FILES['isxodniki']))
+{
+    $errors = array();
+    $file_name = $_FILES['isxodniki']['name'];
+    $file_size = $_FILES['isxodniki']['size'];
+    $file_tmp = $_FILES['isxodniki']['tmp_name'];
+    $file_type = $_FILES['isxodniki']['type'];
+
+
+    $expensions = array("txt", "docx", "doc");
+
+    if(empty($errors) == true)
+    {
+        echo "Success";
+        move_uploaded_file($file_tmp, "isxodniki/".$file_name);
+
+    }
+    else
+    {
+        echo "Error";
+        print $errors;
+    }
+}
+
+if(isset($_FILES['recenziya']))
+{
+    $errors = array();
+    $file_name = $_FILES['recenziya']['name'];
+    $file_size = $_FILES['recenziya']['size'];
+    $file_tmp = $_FILES['recenziya']['tmp_name'];
+    $file_type = $_FILES['recenziya']['type'];
+
+
+    $expensions = array("txt", "docx", "doc");
+
+    if(empty($errors) == true)
+    {
+        echo "Success";
+        move_uploaded_file($file_tmp, "recenziya/".$file_name);
+
+    }
+    else
+    {
+        echo "Error";
+        print $errors;
+    }
+}
+
+if(isset($_FILES['comment']))
+{
+    $errors = array();
+    $file_name = $_FILES['comment']['name'];
+    $file_size = $_FILES['comment']['size'];
+    $file_tmp = $_FILES['comment']['tmp_name'];
+    $file_type = $_FILES['comment']['type'];
+
+
+    $expensions = array("txt", "docx", "doc");
+
+    if(empty($errors) == true)
+    {
+        echo "Success";
+        move_uploaded_file($file_tmp, "comment/".$file_name);
+
+    }
+    else
+    {
+        echo "Error";
+        print $errors;
+    }
+}
+
 
 ?>
 
@@ -97,10 +218,12 @@ if(isset($_FILES['image']))
 	<div class = "add_files">
 		<div >
 			<div class = "name left_name" >Задание на ВКР:</div>
-			<div class = "block "> 
-				<input type = "file">
-				<br><input type = "button" value = "+еще файл">
-			
+			<div class = "block ">
+                <form action="" method="post" enctype="multipart/form-data">
+                    <input type = "file" name="zadanie">
+                    <input type = "submit">
+                    <br><input type = "button" value = "+еще файл">
+                </form>
 			</div>
 			<div class = "result good">
 				<div>Проверено</div>
@@ -108,9 +231,12 @@ if(isset($_FILES['image']))
 		</div>
 		<div >
 			<div class = "name left_name" >Текст ВКР:</div>
-			<div class = "block "> 
-				<input type = "file">
-				<br><input type = "button" value = "+еще файл">
+			<div class = "block ">
+                <form action="" method="post" enctype="multipart/form-data">
+                    <input type = "file" name="text">
+                    <input type = "submit">
+                    <br><input type = "button" value = "+еще файл">
+                </form>
 			</div>
 			<div class = "result bad">
 				<div>Нет отметки о согласовании с руководителем ВКР</div>
@@ -131,9 +257,12 @@ if(isset($_FILES['image']))
 		</div>
 		<div >
 			<div class = "name left_name" >Исходные тексты и дистрибутив:</div>
-			<div class = "block "> 
-				<input type = "file">
-				<br><input type = "button" value = "+еще файл">
+			<div class = "block ">
+                <form action="" method="post" enctype="multipart/form-data">
+                    <input type = "file" name="isxodniki">
+                    <input type = "submit">
+                    <br><input type = "button" value = "+еще файл">
+                </form>
 			</div>
 			<div class = "result okay ">
 				<div>Не проверено</div>
@@ -141,9 +270,12 @@ if(isset($_FILES['image']))
 		</div>
 		<div >
 			<div class = "name left_name" >Отзыв руководителя:</div>
-			<div class = "block "> 
-				<input type = "file">
-				<br><input type = "button" value = "+еще файл">
+			<div class = "block ">
+                <form action="" method="post" enctype="multipart/form-data">
+                    <input type = "file" name="comment">
+                    <input type = "submit">
+                    <br><input type = "button" value = "+еще файл">
+                </form>
 			</div>
 			<div class = "result okay">
 				<div>Не проверено</div>
@@ -151,9 +283,12 @@ if(isset($_FILES['image']))
 		</div>
 		<div >
 			<div class = "name left_name" >Рецензия:</div>
-			<div class = "block "> 
-				<input type = "file">
-				<br><input type = "button" value = "+еще файл">
+			<div class = "block ">
+                <form action="" method="post" enctype="multipart/form-data">
+                    <input type = "file" name="recenziya">
+                    <input type = "submit">
+                    <br><input type = "button" value = "+еще файл">
+                </form>
 			</div>
 			<div class = "result okay">
 				<div>Не проверено</div>
