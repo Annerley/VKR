@@ -1,0 +1,192 @@
+.load_block > div > .type
+{
+	float:left;
+
+}
+
+.load_block > div > .name
+{
+	float:left;
+	width:80%;
+}
+
+.load_block {
+	width:800px; /*800px*/
+}
+
+.state {
+	float:left;
+	width:100%;
+	margin-bottom:20px;
+}
+
+.progress
+{
+	float:left;
+	
+	width:20%;
+	position:relative;
+}
+.state > div:first-child
+{
+	float:left;
+}
+.load{
+	height:20px;
+	width:98%;
+	background:grey;
+	position:relative;
+}
+
+
+.clear
+{
+	clear:both;
+}
+
+.files .name{
+	float:left;
+	width:80%;
+}
+.files .label
+{
+	float:left;
+	width:20%;
+}
+
+.add_files  .name
+{
+	float:left;
+}
+
+.add_files  .block
+{
+	float:left;
+	width:60%;
+}
+
+.add_files  .result
+{
+	float:left;
+	width:20%;
+}
+.wrapper
+{
+	width:800px;/*800px*/
+	margin:0 auto; 
+}
+.left_name
+{
+	width:20%;
+}
+.result.good
+{
+	color:green;
+}
+.result.okay
+{
+	color:grey;
+}
+.result.bad
+{
+	color:red;
+}
+
+.progress2
+{
+	width:98%;
+	float:left;
+	margin-right:0.5%;
+}
+.progress2 > .square
+{
+	height:20px;
+	margin-right:1%;
+	background-color:grey;
+	width:15.83%;
+	float:left;
+
+}
+.progress2 > .square:nth-child(-n+2)
+{
+	background:#f6b8b4;
+}
+
+.add_files > div{
+	margin-top:30px;
+}
+
+.add_files hr
+{
+	margin-top:20px;
+}
+
+/*
+
+#e7d7bb
+#386a3b
+#b0dfb3
+#f6b8b4
+
+*/
+
+.progress2::after
+{
+	content:'';
+	height:3px;
+	width:100%;
+	position:relative;
+	background:#f6b8b4;
+	float:left;
+	margin-top:2px;
+	width:100%;
+}
+
+.progress2.first::after
+{
+	background:#f6b8b4;
+}
+.progress2.fourth::after
+{
+	background:#386a3b;
+}
+.progress2.third::after
+{
+	background:#b0dfb3;
+}
+.progress2.second::after
+{
+	background:#fdd99d;
+}
+.progress2 > div:last-child{
+	
+	margin-right:0px;
+}
+
+.text
+{
+	float:left;
+	width:19.5%;
+	
+}
+
+
+.pr100 
+{
+	width:100%;
+	background-color:grey;
+	height:20px;
+	float:left;
+}
+
+.button
+{
+	width:100%;
+	height:30px;
+	text-align:center;
+}
+
+
+
+
+
