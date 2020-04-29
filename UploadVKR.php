@@ -1,5 +1,7 @@
 <?php
 
+include 'MySQL.php';
+
 if(isset($_FILES['image']))
 {
     $errors = array();
@@ -146,7 +148,12 @@ if(isset($_FILES['comment']))
 
 
 ?>
+<?php
+$p = new MySQL;
 
+$student = $p->request_array("SELECT * FROM students WHERE id=".$_GET["id"]);
+
+?>
 
 <!DOCTYPE HTML PUBLIC >
 <html>
@@ -161,7 +168,7 @@ if(isset($_FILES['comment']))
 	<div class="load_block">
 		<div>
 			<div class ="type left_name">Студент:</div>
-			<div class = "name">Иван Иванов Иванович</div>
+			<div class = "name"><?=$student["first_name"]?> <?=$student["middle_name"]?> <?=$student["last_name"]?></div>
 		</div>
 		<div>
 			<div class ="type left_name">Учебная группа:</div>

@@ -1,37 +1,14 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "vkr";
-/*try 
-{
-	$conn =  new PDO("mysql:host=$servername; dbname=vkr", $username, $password);
-	echo "Connection succesfull";
-}
-catch(PDOException $e)
-{
-	echo "Connection failed: ".$e -> getMessage(); //another type of connect
-}
-*/
-$conn = new mysqli($servername, $username, $password, $database);
-if($conn -> connect_error)
-{
-	die("Connection failed:" .$conn->connect_error);
-}
-echo "Connection succesfull";
 
-/*echo "<br>";
-foreach($documents as $doc)
-{
-    echo $doc["id"];
-    echo " ";
-    echo $doc["doc_type"];
-    echo " ";
-    echo $doc["project_id"];
-    echo "<br>";
-}
+include 'MySQL.php';
 
-*/
+$a = new MySQL;
+$students = $a->request("SELECT * FROM students");
+$documents = $a->request("SELECT * FROM document");
+$groups = $a->request("SELECT * FROM groups");
+$projects = $a->request("SELECT * FROM project");
+
+
 /*$sql = "INSERT INTO document (doc_type, project_id, check_answer, positive)
 		VALUES('1','2','NICETRY','1')"	;
 
@@ -41,40 +18,10 @@ if($conn -> query($sql) === TRUE)
 }
 
 */ // insert in db
-$sql = "SELECT * FROM document";   // table documents and output
-$result = mysqli_query($conn, $sql);
-$documents = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 
-$allstudents = "SELECT * FROM students";   // table students
-$result = mysqli_query($conn, $allstudents);
-$students = mysqli_fetch_all($result, MYSQLI_ASSOC); //из таблицы студентов
 
 
-$allgroup = "SELECT * FROM groups";   // table group and output
-$result = mysqli_query($conn, $allgroup);
-$groups = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-$allproject = "SELECT * FROM project";   // table project
-$result = mysqli_query($conn, $allproject);
-$projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-
-/*?>
-
-<?php
-$allstudents = "SELECT * FROM students";   // table group and output
-$result = mysqli_query($conn, $allstudents);
-$students = mysqli_fetch_all($result, MYSQLI_ASSOC);
-echo "<br>";
-foreach($students as $student)
-{
-echo $student["first_name"];
-echo " ";
-echo $student["middle_name"];
-echo "<br>";
-}
-*/
 ?>
 <?php
 
@@ -114,9 +61,10 @@ echo "<br>";
               <div class = "name2">записан на защиту</div>
           </div>
 
-         <?php $sttogrp = "SELECT * FROM students_to_group WHERE group_id=$group[id]";
-          $result = mysqli_query($conn, $sttogrp);
-          $student = mysqli_fetch_all($result, MYSQLI_ASSOC); // из таблицы связей?>
+         <?php
+         $c = new MySQL;
+         $student = $c->request("SELECT * FROM students_to_group WHERE group_id=$group[id]");
+         ?>
           <?php  foreach ($student as $studentid): ?>
           <?php  $id = $studentid["student_id"]; //id студента нужного ?>
               <?php foreach ($students as $stid): ?>
@@ -128,7 +76,7 @@ echo "<br>";
 
               <div class = "arrow"></div>
 
-              <div class="left_name15"><?=$stid["first_name"]?> <?=$stid["middle_name"]?></div>
+              <div class="left_name15"><a href = "/UploadVKR.php?id=<?=$stid["id"]?>"><?=$stid["first_name"]?> <?=$stid["middle_name"]?></a></div>
 
               <div class = "text">
                   <div class ="progress2 progress4only first">
