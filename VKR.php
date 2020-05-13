@@ -110,7 +110,12 @@ if($conn -> query($sql) === TRUE)
               </div>
               <div class = "text">
                   <div class ="progress2 last">
-                      <div class = "last"> 17.02.2001 14:30</div>
+                      <div class = "last">
+                          <?php
+                          if($stid["date"] == NULL) echo 'не назначено';
+                          else echo date('Y-m-d H:i',strtotime($stid["date"]));
+                          ?>
+                      </div>
                   </div>
 
               </div>
@@ -120,33 +125,264 @@ if($conn -> query($sql) === TRUE)
                   <div class = "miniblock">
                       <div class = "namespace">Задание на ВКР:</div>
                       <div class = "file"><a href="">Файл(залито 15.45.9801 12:56)</a></div>
-                      <div class = "metka good">проверено</div>
+
+
+
+                          <?php
+                          $flag = 0;
+
+                          $pidor = $a->request_array("SELECT document1_id FROM `project` WHERE student_id = $stid[id]");
+                          if(!empty($pidor))
+
+                              $doc = $a->request_array("SELECT * FROM document WHERE id = $pidor[document1_id]");
+                          ?>
+                          <?php if ($doc["positive"] == 0): ?>
+                            <div class = "metka good">
+
+                              <?php
+                              $flag = 1;
+                              if(!empty($doc)) {
+                                  $flag = 1;
+                                  echo $doc["check_answer"];
+                              }
+
+                          else echo "lol";
+                          ?>
+
+                            </div>
+                          <?php endif ?>
+
+                      <?php if ($doc["positive"] == 1): ?>
+                          <div class = "metka bad">
+
+                              <?php
+                              if(!empty($doc)) {
+                                  $flag = 1;
+                                  echo $doc["check_answer"];
+                              }
+
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
+                      <?php if ($doc["positive"] == 2): ?>
+                          <div class = "metka okay">
+
+                              <?php
+                              if(!empty($doc)) {
+                                  $flag = 1;
+                                  echo $doc["check_answer"];
+                              }
+
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
                   </div>
                   <div class = "miniblock">
                       <div class = "namespace">Текст ВКР:</div>
                       <div class = "file"><a href="">Файл(залито 15.45.9801 12:56)</a></div>
-                      <div class = "metka bad">нет отметки о согласовании с руководителем ВКР</div>
+                      <?php
+
+                      $pidor = $a->request_array("SELECT document2_id FROM `project` WHERE student_id = $stid[id]");
+                      if(!empty($pidor))
+                          $doc = $a->request_array("SELECT * FROM document WHERE id = $pidor[document2_id]");
+                      ?>
+                      <?php if ($doc["positive"] == 0): ?>
+                          <div class = "metka good">
+
+                              <?php
+
+                              if(!empty($doc)) {
+
+                                  echo $doc["check_answer"];
+                              }
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
+
+                      <?php if ($doc["positive"] == 1): ?>
+                          <div class = "metka bad">
+
+                              <?php
+                              if(!empty($doc)) {
+
+                                  echo $doc["check_answer"];
+                              }
+
+                              else echo "lol";
+
+                              ?>
+
+                          </div>
+                      <?php endif ?>
+                      <?php if ($doc["positive"] == 2): ?>
+                          <div class = "metka okay">
+
+                              <?php
+                              if(!empty($doc)) {
+                                  $flag = 1;
+                                  echo $doc["check_answer"];
+                              }
+
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
+
+
+
                   </div>
                   <div class = "miniblock">
                       <div class = "namespace red">Граф. Материалы:</div>
                       <div class = "file"><a href="">Файл(залито 15.45.9801 12:56)</a></div>
                       <input type = "text"></input>
-                      <button>Ответить</button>
+                      <button> Ответить </button>
                   </div>
                   <div class = "miniblock">
                       <div class = "namespace">Исх. тексты:</div>
                       <div class = "file"><a href="">Файл(залито 15.45.9801 12:56)</a></div>
-                      <div class = "metka okay">не проверено</div>
+                      <?php
+                      $flag = 0;
+                      $pidor = $a->request_array("SELECT document4_id FROM `project` WHERE student_id = $stid[id]");
+                      if(!empty($pidor))
+                          $doc = $a->request_array("SELECT * FROM document WHERE id = $pidor[document4_id]");
+                      ?>
+                      <?php if ($doc["positive"] == 0): ?>
+                          <div class = "metka good">
+
+                              <?php
+                              if(!empty($doc)) {
+
+                                  echo $doc["check_answer"];
+                              }
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
+
+                      <?php if ($doc["positive"] == 1): ?>
+                          <div class = "metka bad">
+
+                              <?php
+                              if(!empty($doc)) {
+
+                                  echo $doc["check_answer"];
+                              }
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
+                      <?php if ($doc["positive"] == 2): ?>
+                          <div class = "metka okay">
+
+                              <?php
+                              if(!empty($doc)) {
+                                  $flag = 1;
+                                  echo $doc["check_answer"];
+                              }
+
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
                   </div>
                   <div class = "miniblock">
                       <div class = "namespace">Отзыв руководителя:</div>
                       <div class = "file"><a href="">Файл(залито 15.45.9801 12:56)</a></div>
-                      <div class = "metka okay">не проверено</div>
+                      <?php
+
+                      $pidor = $a->request_array("SELECT document5_id FROM `project` WHERE student_id = $stid[id]");
+                      if(!empty($pidor))
+                          $doc = $a->request_array("SELECT * FROM document WHERE id = $pidor[document5_id]");
+                      ?>
+                      <?php if ($doc["positive"] == 0): ?>
+                          <div class = "metka good">
+
+                              <?php
+                              if(!empty($doc)) {
+
+                                  echo $doc["check_answer"];
+                              }
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
+
+                      <?php if ($doc["positive"] == 1): ?>
+                          <div class = "metka bad">
+
+                              <?php
+                              if(!empty($doc)) {
+
+                                  echo $doc["check_answer"];
+                              }
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
+                      <?php if ($doc["positive"] == 2): ?>
+                          <div class = "metka okay">
+
+                              <?php
+                              if(!empty($doc)) {
+                                  $flag = 1;
+                                  echo $doc["check_answer"];
+                              }
+
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
                   </div>
                   <div class = "miniblock">
                       <div class = "namespace">Рецензия:</div>
                       <div class = "file"><a href="">Файл(залито 15.45.9801 12:56)</a></div>
-                      <div class = "metka okay">не проверено</div>
+                      <?php
+
+                      $pidor = $a->request_array("SELECT document6_id FROM `project` WHERE student_id = $stid[id]");
+                      if(!empty($pidor))
+
+                          $doc = $a->request_array("SELECT * FROM document WHERE id = $pidor[document6_id]");
+                      ?>
+                      <?php if ($doc["positive"] == 0): ?>
+                          <div class = "metka good">
+
+                              <?php
+                              if(!empty($doc)) {
+
+                                  echo $doc["check_answer"];
+                              }
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
+
+                      <?php if ($doc["positive"] == 1): ?>
+                          <div class = "metka bad">
+
+                              <?php
+                              if(!empty($doc)) {
+
+                                  echo $doc["check_answer"];
+                              }
+                              else echo "lol";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
                   </div>
 
               </div>

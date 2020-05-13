@@ -1,7 +1,105 @@
 <?php
-
 include 'MySQL.php';
+$p = new MySQL;
 
+$student = $p->request_array("SELECT * FROM students WHERE id=".$_GET["id"]);
+$group_id = $p->request_array("SELECT * FROM students_to_group WHERE student_id=".$_GET["id"]);
+
+$group_name = $p->request_array("SELECT * FROM groups WHERE id=".$group_id["group_id"]);
+
+$l[1] = $p->request_array("SELECT `document1_id` FROM `project` WHERE student_id=".$_GET["id"]);
+$l[2] = $p->request_array("SELECT `document2_id` FROM `project` WHERE student_id=".$_GET["id"]);
+$l[3] = $p->request_array("SELECT `document3_id` FROM `project` WHERE student_id=".$_GET["id"]);
+$l[4] = $p->request_array("SELECT `document4_id` FROM `project` WHERE student_id=".$_GET["id"]);
+$l[5] = $p->request_array("SELECT `document5_id` FROM `project` WHERE student_id=".$_GET["id"]);
+$l[6] = $p->request_array("SELECT `document6_id` FROM `project` WHERE student_id=".$_GET["id"]);
+
+$q[1] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[1]["document1_id"]);
+$q[2] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[2]["document2_id"]);
+$q[3] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[3]["document3_id"]);
+$q[4] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[4]["document4_id"]);
+$q[5] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[5]["document5_id"]);
+$q[6] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[6]["document6_id"]);
+//echo $q[1]["quantity"];
+
+function GetNewName($student, $num, $q)
+{
+    return $result =  $student["id"].$student["middle_name"]."_doc".$num."_".$q[$num]["quantity"];
+}
+
+function getExtension ($mime_type,$filename){
+
+    $extensions = array('image/jpeg' => 'jpeg',
+        'text/xml' => 'xml',
+        'image/bmp'                                                                 => 'bmp',
+        'image/x-bmp'                                                               => 'bmp',
+        'image/x-bitmap'                                                            => 'bmp',
+        'image/x-xbitmap'                                                           => 'bmp',
+        'image/x-win-bitmap'                                                        => 'bmp',
+        'image/x-windows-bmp'                                                       => 'bmp',
+        'image/ms-bmp'                                                              => 'bmp',
+        'image/x-ms-bmp'                                                            => 'bmp',
+        'image/jpx'                                                                 => 'jp2',
+        'image/jpm'                                                                 => 'jp2',
+        'image/jpeg'                                                                => 'jpeg',
+        'image/pjpeg'                                                               => 'jpeg',
+        'application/x-javascript'                                                  => 'js',
+        'application/json'                                                          => 'json',
+        'text/json'                                                                 => 'json',
+        'application/pdf'                                                           => 'pdf',
+        'application/octet-stream'                                                  => 'pdf',
+        'application/x-rar'                                                         => 'rar',
+        'application/rar'                                                           => 'rar',
+        'application/x-rar-compressed'                                              => 'rar',
+        'application/x-tar'                                                         => 'tar',
+        'application/x-gzip-compressed'                                             => 'tgz',
+        'image/tiff'                                                                => 'tiff',
+        'font/ttf'                                                                  => 'ttf',
+        'text/plain'                                                                => 'txt',
+        'video/x-ms-asf'                                                            => 'wmv',
+        'application/xhtml+xml'                                                     => 'xhtml',
+        'application/excel'                                                         => 'xl',
+        'application/msexcel'                                                       => 'xls',
+        'application/x-msexcel'                                                     => 'xls',
+        'application/x-ms-excel'                                                    => 'xls',
+        'application/x-excel'                                                       => 'xls',
+        'application/x-dos_ms_excel'                                                => 'xls',
+        'application/xls'                                                           => 'xls',
+        'application/x-xls'                                                         => 'xls',
+        'application/xml'                                                           => 'xml',
+        'text/xml'                                                                  => 'xml',
+        'text/xsl'                                                                  => 'xsl',
+        'application/xspf+xml'                                                      => 'xspf',
+        'application/x-compress'                                                    => 'z',
+        'application/x-zip'                                                         => 'zip',
+        'application/zip'                                                           => 'zip',
+        'application/x-zip-compressed'                                              => 'zip',
+        'application/s-compressed'                                                  => 'zip',
+        'multipart/x-zip'                                                           => 'zip',
+        'text/x-scriptzsh'                                                          => 'zsh',
+       /* 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'   => 'docx',
+        'application/x-empty'                                                       => 'docx',
+        'application/msword'                                                        => 'doc',
+       */
+    );
+    if (empty($extensions[$mime_type]))
+    {
+        if (preg_match('/\.([^$]*)/imsu',$filename,$res))
+        {
+            $ext = $res[1];
+          //  print_r($res);
+        }
+    }
+    else
+    {
+        $ext = $extensions[$mime_type];
+    }
+
+    return $ext;
+}
+
+$VKR = "VKR/";
+$file_name2 = 'HUI';
 if(isset($_FILES['image']))
 {
     $errors = array();
@@ -9,14 +107,19 @@ if(isset($_FILES['image']))
     $file_size = $_FILES['image']['size'];
     $file_tmp = $_FILES['image']['tmp_name'];
     $file_type = $_FILES['image']['type'];
-    $file_ext = strtolower(end(explode('.',$_FILES['image']['name'] )));
+    //$file_ext = strtolower(end(explode('.',$_FILES['image']['type'] )));
+    $num = 3;
+    $fileNewName = GetNewName($student, $num, $q);
 
-    $expensions = array("jpeg", "jpg", "png");
-
+    echo $fileNewName;
     if(empty($errors) == true)
     {
-        echo "Success";
-        move_uploaded_file($file_tmp, "images/".$file_name);
+        // echo sys_get_temp_dir();
+        // echo mime_content_type($file_tmp);
+        // echo "Success";
+        //echo getExtension(mime_content_type($file_tmp),  $file_name);
+
+        move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $file_name));
 
     }
     else
@@ -25,7 +128,6 @@ if(isset($_FILES['image']))
         print $errors;
     }
 }
-
 if(isset($_FILES['zadanie']))
 {
     $errors = array();
@@ -33,14 +135,18 @@ if(isset($_FILES['zadanie']))
     $file_size = $_FILES['zadanie']['size'];
     $file_tmp = $_FILES['zadanie']['tmp_name'];
     $file_type = $_FILES['zadanie']['type'];
+    $num = 1;
+    $fileNewName = GetNewName($student, $num, $q);
 
-
-    $expensions = array("txt", "docx", "doc");
-
+    echo $fileNewName;
     if(empty($errors) == true)
     {
-        echo "Success";
-        move_uploaded_file($file_tmp, "zadanie/".$file_name);
+        // echo sys_get_temp_dir();
+        // echo mime_content_type($file_tmp);
+        // echo "Success";
+        //echo getExtension(mime_content_type($file_tmp),  $file_name);
+
+        move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $file_name));
 
     }
     else
@@ -57,14 +163,18 @@ if(isset($_FILES['text']))
     $file_size = $_FILES['text']['size'];
     $file_tmp = $_FILES['text']['tmp_name'];
     $file_type = $_FILES['text']['type'];
-   // $file_ext = strtolower(end(explode('.',$_FILES['text']['name'] )));
+    $num = 2;
+    $fileNewName = GetNewName($student, $num, $q);
 
-    $expensions = array("txt", "docx", "doc");
-
+    echo $fileNewName;
     if(empty($errors) == true)
     {
-        echo "Success";
-        move_uploaded_file($file_tmp, "zadanie/".$file_name);
+        // echo sys_get_temp_dir();
+        // echo mime_content_type($file_tmp);
+        // echo "Success";
+        //echo getExtension(mime_content_type($file_tmp),  $file_name);
+
+        move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $file_name));
 
     }
     else
@@ -81,14 +191,18 @@ if(isset($_FILES['isxodniki']))
     $file_size = $_FILES['isxodniki']['size'];
     $file_tmp = $_FILES['isxodniki']['tmp_name'];
     $file_type = $_FILES['isxodniki']['type'];
+    $num = 4;
+    $fileNewName = GetNewName($student, $num, $q);
 
-
-    $expensions = array("txt", "docx", "doc");
-
+    echo $fileNewName;
     if(empty($errors) == true)
     {
-        echo "Success";
-        move_uploaded_file($file_tmp, "isxodniki/".$file_name);
+        // echo sys_get_temp_dir();
+        // echo mime_content_type($file_tmp);
+        // echo "Success";
+        //echo getExtension(mime_content_type($file_tmp),  $file_name);
+
+        move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $file_name));
 
     }
     else
@@ -105,14 +219,18 @@ if(isset($_FILES['recenziya']))
     $file_size = $_FILES['recenziya']['size'];
     $file_tmp = $_FILES['recenziya']['tmp_name'];
     $file_type = $_FILES['recenziya']['type'];
+    $num = 6;
+    $fileNewName = GetNewName($student, $num, $q);
 
-
-    $expensions = array("txt", "docx", "doc");
-
+    echo $fileNewName;
     if(empty($errors) == true)
     {
-        echo "Success";
-        move_uploaded_file($file_tmp, "recenziya/".$file_name);
+        // echo sys_get_temp_dir();
+        // echo mime_content_type($file_tmp);
+        // echo "Success";
+        //echo getExtension(mime_content_type($file_tmp),  $file_name);
+
+        move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $file_name));
 
     }
     else
@@ -129,14 +247,18 @@ if(isset($_FILES['comment']))
     $file_size = $_FILES['comment']['size'];
     $file_tmp = $_FILES['comment']['tmp_name'];
     $file_type = $_FILES['comment']['type'];
+    $num = 5;
+    $fileNewName = GetNewName($student, $num, $q);
 
-
-    $expensions = array("txt", "docx", "doc");
-
+    echo $fileNewName;
     if(empty($errors) == true)
     {
-        echo "Success";
-        move_uploaded_file($file_tmp, "comment/".$file_name);
+        // echo sys_get_temp_dir();
+        // echo mime_content_type($file_tmp);
+        // echo "Success";
+        //echo getExtension(mime_content_type($file_tmp),  $file_name);
+
+        move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $file_name));
 
     }
     else
@@ -146,14 +268,8 @@ if(isset($_FILES['comment']))
     }
 }
 
-
 ?>
-<?php
-$p = new MySQL;
 
-$student = $p->request_array("SELECT * FROM students WHERE id=".$_GET["id"]);
-
-?>
 
 <!DOCTYPE HTML PUBLIC >
 <html>
@@ -172,7 +288,7 @@ $student = $p->request_array("SELECT * FROM students WHERE id=".$_GET["id"]);
 		</div>
 		<div>
 			<div class ="type left_name">Учебная группа:</div>
-			<div class = "name">КМБО-02-19</div>
+			<div class = "name"><?=$group_name["name"]?></div>
 		</div>
 		<div class="clear"></div>
 	</div>
