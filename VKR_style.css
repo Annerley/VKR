@@ -38,6 +38,15 @@
 .clear
 {
 	clear:both;
+
+}
+.miniblock:after
+{
+	content: '';
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
 }
 
 .files .name{
@@ -125,24 +134,6 @@
     margin-right: 0px;
 }
 
-.progress4only
-{
-	width:98%;
-	float:left;
-	margin-right:0.5%;
-}
-.progress4only > .square
-{
-	height:20px;
-	margin-right:1%;
-	background-color:grey;
-	width:15.83%;
-	float:left;
-
-}
-
-
-
 
 .progress6
 {
@@ -150,6 +141,7 @@
 	float:left;
 	margin-right:0.5%;
 }
+
 .progress6 > .square
 {
 	height:20px;
@@ -162,26 +154,6 @@
 
 .progress6 > div:last-child {
     margin-right: 0px;
-}
-.progress2 > .square:nth-child(-n+2)
-{
-	background:#f6b8b4;
-}
-
-.progress4 > .square:nth-child(-n+4)
-{
-	background:#f6b8b4;
-}
-
-.progress4only > .square:nth-child(4)
-{
-	background:#f6b8b4;
-}
-
-
-.progress6 > .square:nth-child(-n+6)
-{
-	background:#f6b8b4;
 }
 
 .add_files > div{
@@ -201,7 +173,10 @@
 #f6b8b4
 
 */
-
+.square.on
+{
+	background:#f6b8b4;
+}
 .progress2::after
 {
 	content:'';
@@ -241,10 +216,10 @@
 }
 
 
-.progress2.first::after
+/*.progress2.first::after
 {
 	background:#f6b8b4;
-}
+}*/
 .progress2.fourth::after
 {
 	background:#386a3b;
@@ -370,7 +345,6 @@
 .miniblock
 {
 	weight:100;
-	height:40px;
 	margin-bottom:10px;
 
 	
