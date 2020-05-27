@@ -43,7 +43,19 @@ class MySQL
         $documents = mysqli_fetch_array($result, MYSQLI_ASSOC);
         return $documents;
     }
-
+    public function insert($str)
+    {
+        echo $str;
+        $sql = $str;   // table documents and output
+        $result = mysqli_query($this->conn, $sql);
+        if($result === FALSE)
+        {
+            //throw new exception("db error");
+            //print_r($result);
+            return NULL;
+        }
+        return TRUE;
+    }
 }
 ?>
 

@@ -140,7 +140,7 @@ if($conn -> query($sql) === TRUE)
                       <?php
                       if ($f==6){?>
                           <div class = "pr100 on"></div>
-                      <?php
+                          <?php
                       }?>
                       <?php //переделать
                       if ($f<6){?>
@@ -206,7 +206,7 @@ if($conn -> query($sql) === TRUE)
 
 
 
-                                  <?php endforeach; }else echo "Нет файлов";} else echo "Документа нет в бд документ" ?>
+                                  <?php endforeach; }else echo "Нет файлов";} else echo "Документа нет в бд документов" ?>
                       </div>
 
 
