@@ -33,7 +33,7 @@ function GetNewName($student, $num)
 
 function getExtension ($mime_type,$filename){
 
-    $extensions = array('image/jpeg' => 'jpeg',
+    $extensions = array(
         'text/xml' => 'xml',
         'image/bmp'                                                                 => 'bmp',
         'image/x-bmp'                                                               => 'bmp',
@@ -112,30 +112,25 @@ if(isset($_FILES['image']))
     {
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['image']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num);
-        //echo $_FILES['text']['name'][$key];
+        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
+        //echo $fileNewName;
         $errors = array();
-        echo $filename;
+        //echo $filename;
         if(empty($errors) == true)
         {
             // echo sys_get_temp_dir();
             // echo mime_content_type($file_tmp);
             // echo "Success";
-            //echo getExtension(mime_content_type($file_tmp),  $file_name);
+            //echo getExtension(mime_content_type($file_tmp),  $filename);
 
-            move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $filename));
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
 
         }
-        else
-        {
-            echo "Error";
-            print $errors;
-        }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$VKR.$fileNewName') ")))
+        else if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
         {
             throw new Exception('Load error');
         }
-     echo "\"INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$VKR.$fileNewName') \"))";
+     //echo "\"INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$VKR.$fileNewName') \"))";
 
     }
 }
@@ -146,10 +141,11 @@ if(isset($_FILES['zadanie']))
     {
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['zadanie']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num);
+        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
+        //echo $fileNewName;
         //echo $_FILES['text']['name'][$key];
         $errors = array();
-        echo $filename;
+        //echo $filename;
         if(empty($errors) == true)
         {
             // echo sys_get_temp_dir();
@@ -157,7 +153,7 @@ if(isset($_FILES['zadanie']))
             // echo "Success";
             //echo getExtension(mime_content_type($file_tmp),  $file_name);
 
-            move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $filename));
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
 
         }
         else
@@ -165,7 +161,7 @@ if(isset($_FILES['zadanie']))
             echo "Error";
             print $errors;
         }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$VKR.$fileNewName') ")))
+        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
         {
             throw new Exception('Load error');
         }
@@ -180,10 +176,10 @@ if(isset($_FILES['text']))
     {
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['text']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num);
+        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
         //echo $_FILES['text']['name'][$key];
         $errors = array();
-        echo $filename;
+        //echo $filename;
         if(empty($errors) == true)
         {
             // echo sys_get_temp_dir();
@@ -191,7 +187,7 @@ if(isset($_FILES['text']))
             // echo "Success";
             //echo getExtension(mime_content_type($file_tmp),  $file_name);
 
-            move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $filename));
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
 
         }
         else
@@ -199,7 +195,7 @@ if(isset($_FILES['text']))
             echo "Error";
             print $errors;
         }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$VKR.$fileNewName') ")))
+        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
         {
             throw new Exception('Load error');
         }
@@ -215,10 +211,10 @@ if(isset($_FILES['isxodniki']))
     {
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['isxodniki']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num);
+        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
         //echo $_FILES['text']['name'][$key];
         $errors = array();
-        echo $filename;
+        //echo $filename;
         if(empty($errors) == true)
         {
             // echo sys_get_temp_dir();
@@ -226,7 +222,7 @@ if(isset($_FILES['isxodniki']))
             // echo "Success";
             //echo getExtension(mime_content_type($file_tmp),  $file_name);
 
-            move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $filename));
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
 
         }
         else
@@ -234,7 +230,7 @@ if(isset($_FILES['isxodniki']))
             echo "Error";
             print $errors;
         }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$VKR.$fileNewName') ")))
+        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
         {
             throw new Exception('Load error');
         }
@@ -248,10 +244,10 @@ if(isset($_FILES['recenziya']))
     {
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['recenziya']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num);
+        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
         //echo $_FILES['text']['name'][$key];
         $errors = array();
-        echo $filename;
+        //echo $filename;
         if(empty($errors) == true)
         {
             // echo sys_get_temp_dir();
@@ -259,7 +255,7 @@ if(isset($_FILES['recenziya']))
             // echo "Success";
             //echo getExtension(mime_content_type($file_tmp),  $file_name);
 
-            move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $filename));
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
 
         }
         else
@@ -267,7 +263,7 @@ if(isset($_FILES['recenziya']))
             echo "Error";
             print $errors;
         }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$VKR.$fileNewName') ")))
+        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
         {
             throw new Exception('Load error');
         }
@@ -282,10 +278,10 @@ if(isset($_FILES['comment']))
     {
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['comment']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num);
+        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
         //echo $_FILES['text']['name'][$key];
         $errors = array();
-        echo $filename;
+        //echo $filename;
         if(empty($errors) == true)
         {
             // echo sys_get_temp_dir();
@@ -293,7 +289,7 @@ if(isset($_FILES['comment']))
             // echo "Success";
             //echo getExtension(mime_content_type($file_tmp),  $file_name);
 
-            move_uploaded_file($file_tmp, $VKR.$fileNewName.".".getExtension(mime_content_type($file_tmp),  $filename));
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
 
         }
         else
@@ -301,7 +297,7 @@ if(isset($_FILES['comment']))
             echo "Error";
             print $errors;
         }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$VKR.$fileNewName') ")))
+        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
         {
             throw new Exception('Load error');
         }

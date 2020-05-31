@@ -1,5 +1,6 @@
 <?php
 
+$checker  = 1; //0 if upload 1 if check
 include 'MySQL.php';
 
 $a = new MySQL;
@@ -76,7 +77,22 @@ if($conn -> query($sql) === TRUE)
 
               <div class = "arrow"></div>
 
-              <div class="left_name15"><a href = "/UploadVKR.php?id=<?=$stid["id"]?>"><?=$stid["first_name"]?> <?=$stid["middle_name"]?></a></div>
+              <div class="left_name15"><?php
+                  if($checker == 0 ):?>
+
+                      <a href="/UploadVKR.php?id=<?= $stid["id"] ?>"><?= $stid["first_name"] ?> <?= $stid["middle_name"] ?></a>
+
+
+                  <?php else: if($checker == 1) :?>
+
+
+                      <a href = "/proverkaVKR.php?id=<?=$stid["id"]?>"><?=$stid["first_name"]?> <?=$stid["middle_name"]?></a>
+                  <?php endif;?>
+                  <?php endif;?>
+
+
+
+              </div>
 
               <div class = "text">
                   <div class ="progress2 first">

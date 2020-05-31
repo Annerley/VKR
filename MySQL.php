@@ -45,7 +45,7 @@ class MySQL
     }
     public function insert($str)
     {
-        echo $str;
+        //echo $str;
         $sql = $str;   // table documents and output
         $result = mysqli_query($this->conn, $sql);
         if($result === FALSE)

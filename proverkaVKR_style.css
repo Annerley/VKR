@@ -107,10 +107,6 @@
 	float:left;
 
 }
-.progress2 > .square:nth-child(-n+2)
-{
-	background:#f6b8b4;
-}
 
 .add_files > div{
 	margin-top:30px;
@@ -120,6 +116,7 @@
 {
 	margin-top:20px;
 }
+
 
 /*
 
@@ -204,3 +201,18 @@
 	margin-top:5px;
 }
 
+.second .on{
+	background-color:#fdd99d;
+}
+
+.third .on
+{
+	background-color:#b0dfb3;
+}
+.fourth .on{
+	background-color:#386a3b;
+}
+.square.on
+{
+	background:#f6b8b4;
+}
