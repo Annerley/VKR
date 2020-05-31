@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Апр 22 2020 г., 17:35
+-- Время создания: Май 31 2020 г., 15:19
 -- Версия сервера: 10.4.11-MariaDB
--- Версия PHP: 7.4.4
+-- Версия PHP: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -31,8 +32,8 @@ CREATE TABLE `document` (
   `id` int(11) NOT NULL,
   `doc_type` int(11) NOT NULL,
   `project_id` int(11) NOT NULL,
-  `check_answer` text NOT NULL,
-  `positive` tinyint(1) NOT NULL
+  `check_answer` text NOT NULL DEFAULT 'не проверено',
+  `positive` tinyint(1) NOT NULL DEFAULT 2
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -40,13 +41,42 @@ CREATE TABLE `document` (
 --
 
 INSERT INTO `document` (`id`, `doc_type`, `project_id`, `check_answer`, `positive`) VALUES
-(1, 1, 1, 'ЛЯЛЯЛЯ', 0),
-(2, 2, 1, '', 0),
-(3, 3, 1, '', 0),
-(4, 4, 1, '', 0),
-(5, 5, 1, '', 0),
-(6, 6, 1, '', 0),
-(7, 1, 2, 'NICETRY', 1);
+(1, 1, 1, 'Проверено', 0),
+(2, 2, 1, 'Проверено', 0),
+(3, 3, 1, 'Проверено', 0),
+(4, 4, 1, 'Проверено', 0),
+(5, 5, 1, 'Проверено', 0),
+(6, 6, 1, 'Проверено', 0),
+(7, 1, 2, '123', 1),
+(8, 2, 2, '123', 1),
+(9, 3, 2, '123', 1),
+(10, 4, 2, '123', 1),
+(11, 5, 2, '123', 1),
+(12, 6, 2, '123', 1),
+(14, 1, 3, '123', 1),
+(15, 2, 3, '123', 1),
+(16, 3, 3, '123', 1),
+(17, 4, 3, '123', 1),
+(18, 5, 3, '123', 1),
+(19, 6, 3, '123', 1),
+(20, 1, 4, 'не проверено', 2),
+(21, 2, 4, 'не проверено', 2),
+(22, 3, 4, 'не проверено', 2),
+(23, 4, 4, 'не проверено', 2),
+(24, 5, 4, 'не проверено', 2),
+(25, 6, 4, 'не проверено', 2),
+(26, 1, 5, 'не проверено', 2),
+(27, 2, 5, 'не проверено', 2),
+(28, 3, 5, 'не проверено', 2),
+(29, 4, 5, 'не проверено', 2),
+(30, 5, 5, 'не проверено', 2),
+(31, 6, 5, 'не проверено', 2),
+(32, 1, 6, 'не проверено', 2),
+(33, 2, 6, 'не проверено', 2),
+(34, 3, 6, 'не проверено', 2),
+(35, 4, 6, 'не проверено', 2),
+(36, 5, 6, 'не проверено', 2),
+(37, 6, 6, 'не проверено', 2);
 
 -- --------------------------------------------------------
 
@@ -58,7 +88,7 @@ CREATE TABLE `file` (
   `id` int(11) NOT NULL,
   `document_id` int(11) NOT NULL,
   `path` text NOT NULL,
-  `uploaded` datetime NOT NULL
+  `uploaded` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -66,7 +96,12 @@ CREATE TABLE `file` (
 --
 
 INSERT INTO `file` (`id`, `document_id`, `path`, `uploaded`) VALUES
-(1, 1, 'C:\\', '2020-03-25 19:27:28');
+(133, 1, '1Лапутина_doc1_0.jpeg', '2020-05-30 18:16:33'),
+(134, 1, '1Лапутина_doc1_1.jpeg', '2020-05-30 18:16:33'),
+(135, 1, '1Лапутина_doc1_2.jpeg', '2020-05-30 18:16:33'),
+(136, 2, '1Лапутина_doc2_0.jpeg', '2020-05-30 18:16:36'),
+(137, 2, '1Лапутина_doc2_1.jpeg', '2020-05-30 18:16:36'),
+(138, 2, '1Лапутина_doc2_2.jpeg', '2020-05-30 18:16:36');
 
 -- --------------------------------------------------------
 
@@ -130,7 +165,12 @@ CREATE TABLE `project` (
 --
 
 INSERT INTO `project` (`id`, `document1_id`, `document2_id`, `document3_id`, `document4_id`, `document5_id`, `document6_id`, `student_id`) VALUES
-(1, 1, 2, 3, 4, 5, 6, 1);
+(1, 1, 2, 3, 4, 5, 6, 1),
+(2, 7, 8, 9, 10, 11, 12, 2),
+(3, 14, 15, 16, 17, 18, 19, 3),
+(4, 20, 21, 22, 23, 24, 25, 4),
+(5, 26, 27, 28, 29, 30, 31, 5),
+(6, 32, 33, 34, 35, 36, 37, 6);
 
 -- --------------------------------------------------------
 
@@ -142,19 +182,21 @@ CREATE TABLE `students` (
   `id` int(11) NOT NULL,
   `first_name` text NOT NULL,
   `middle_name` text NOT NULL,
-  `last_name` text NOT NULL
+  `last_name` text NOT NULL,
+  `date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Дамп данных таблицы `students`
 --
 
-INSERT INTO `students` (`id`, `first_name`, `middle_name`, `last_name`) VALUES
-(1, 'Дарья', 'Лапутина', 'Кирилловна'),
-(2, 'Александра', 'Лешану', ''),
-(3, 'Кирилл', 'Погнерыбко', ''),
-(4, 'Дзерасса', 'Кодзасова', ''),
-(5, 'Ирина', 'Патрикеева', '');
+INSERT INTO `students` (`id`, `first_name`, `middle_name`, `last_name`, `date`) VALUES
+(1, 'Дарья', 'Лапутина', 'Кирилловна', '2020-05-03 12:00:00'),
+(2, 'Александра', 'Лешану', '', '2020-05-30 13:00:00'),
+(3, 'Кирилл', 'Погнерыбко', '', '2020-05-30 14:00:00'),
+(4, 'Дзерасса', 'Кодзасова', '', '2020-05-15 16:00:00'),
+(5, 'Ирина', 'Патрикеева', '', NULL),
+(6, 'Сергей', 'Тест', '', '2020-02-03 13:13:43');
 
 -- --------------------------------------------------------
 
@@ -177,7 +219,8 @@ INSERT INTO `students_to_group` (`id`, `student_id`, `group_id`) VALUES
 (2, 2, 1),
 (3, 3, 1),
 (4, 4, 2),
-(5, 5, 2);
+(5, 5, 2),
+(6, 6, 3);
 
 --
 -- Индексы сохранённых таблиц
@@ -233,13 +276,13 @@ ALTER TABLE `students_to_group`
 -- AUTO_INCREMENT для таблицы `document`
 --
 ALTER TABLE `document`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT для таблицы `file`
 --
 ALTER TABLE `file`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
 
 --
 -- AUTO_INCREMENT для таблицы `groups`
@@ -257,19 +300,19 @@ ALTER TABLE `operation`
 -- AUTO_INCREMENT для таблицы `project`
 --
 ALTER TABLE `project`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `students_to_group`
 --
 ALTER TABLE `students_to_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
