@@ -1,6 +1,6 @@
 <?php
 
-$checker  = 1; //0 if upload 1 if check
+$checker  = 0; //0 if upload 1 if check
 include 'MySQL.php';
 
 $a = new MySQL;
@@ -213,16 +213,18 @@ if($conn -> query($sql) === TRUE)
                           {
                               $file = $a->request("SELECT * FROM `file` WHERE document_id=". $request["document1_id"]);
                               //var_dump($file);
+                              $i=1;
                               if($file!= NULL)
                               {
                                   foreach($file as $littlefile):?>
 
-                                      <div ><a href="">Файл(залито <?= date("d.m.Y H:s",strtotime($littlefile["uploaded"]))?>)</a></div>
+
+                                      <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
 
 
-                                  <?php endforeach; }else echo "Нет файлов";} else echo "Документа нет в бд документов" ?>
+                                  <?php $i++; endforeach;} else echo "Нет файлов";} else echo "Документа нет в бд документов" ?>
                       </div>
 
 
@@ -285,27 +287,28 @@ if($conn -> query($sql) === TRUE)
                   <div class = "clear"> </div>
                   <div class = "miniblock">
                       <div class = "namespace">Текст ВКР:</div>
-                      <div class = "file">
+                          <div class = "file">
 
-                          <?php
-                          $request = $a->request_array("SELECT document2_id FROM `project` WHERE student_id =". $stid["id"]);
-                          //var_dump($request );
-                          if($request!= NULL)
-                          {
-                              $file = $a->request("SELECT * FROM `file` WHERE document_id=". $request["document2_id"]);
-                              //var_dump($file);
-                              if($file!= NULL)
+                              <?php
+                              $request = $a->request_array("SELECT document2_id FROM `project` WHERE student_id =". $stid["id"]);
+                              //var_dump($request );
+                              if($request!= NULL)
                               {
-                                  foreach($file as $littlefile):?>
+                                  $file = $a->request("SELECT * FROM `file` WHERE document_id=". $request["document2_id"]);
+                                  //var_dump($file);
+                                  $i=1;
+                                  if($file!= NULL)
+                                  {
+                                      foreach($file as $littlefile):?>
 
-                                      <div ><a href="">Файл(залито <?= date("d.m.Y H:s",strtotime($littlefile["uploaded"]))?>)</a></div>
+
+                                          <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
 
 
-                                  <?php endforeach; }else echo "Нет файлов";} else echo "Документа нет в бд документ" ?>
-                      </div>
-
+                                          <?php $i++; endforeach;} else echo "Нет файлов";} else echo "Документа нет в бд документов" ?>
+                          </div>
 
                       <?php
 
@@ -368,26 +371,28 @@ if($conn -> query($sql) === TRUE)
                   <div class = "miniblock">
                       <div class = "namespace red">Граф. Материалы:</div>
 
-                          <div class = "file">
+                      <div class = "file">
 
-                              <?php
-                              $request = $a->request_array("SELECT document3_id FROM `project` WHERE student_id =". $stid["id"]);
-                              //var_dump($request );
-                              if($request!= NULL)
+                          <?php
+                          $request = $a->request_array("SELECT document3_id FROM `project` WHERE student_id =". $stid["id"]);
+                          //var_dump($request );
+                          if($request!= NULL)
+                          {
+                              $file = $a->request("SELECT * FROM `file` WHERE document_id=". $request["document3_id"]);
+                              //var_dump($file);
+                              $i=1;
+                              if($file!= NULL)
                               {
-                                  $file = $a->request("SELECT * FROM `file` WHERE document_id=". $request["document3_id"]);
-                                  //var_dump($file);
-                                  if($file!= NULL)
-                                  {
-                                      foreach($file as $littlefile):?>
+                                  foreach($file as $littlefile):?>
 
-                                          <div ><a href="">Файл(залито <?= date("d.m.Y H:s",strtotime($littlefile["uploaded"]))?>)</a></div>
+
+                                      <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
 
 
-                                      <?php endforeach; }else echo "Нет файлов";} else echo "Документа нет в бд документ" ?>
-                          </div>
+                                      <?php $i++; endforeach;} else echo "Нет файлов";} else echo "Документа нет в бд документов" ?>
+                      </div>
                       <input type = "text"></input>
                       <button> Ответить </button>
                   </div>
@@ -402,16 +407,18 @@ if($conn -> query($sql) === TRUE)
                           {
                               $file = $a->request("SELECT * FROM `file` WHERE document_id=". $request["document4_id"]);
                               //var_dump($file);
+                              $i=1;
                               if($file!= NULL)
                               {
                                   foreach($file as $littlefile):?>
 
-                                      <div ><a href="">Файл(залито <?= date("d.m.Y H:s",strtotime($littlefile["uploaded"]))?>)</a></div>
+
+                                      <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
 
 
-                                  <?php endforeach; }else echo "Нет файлов";} else echo "Документа нет в бд документ" ?>
+                                      <?php $i++; endforeach;} else echo "Нет файлов";} else echo "Документа нет в бд документов" ?>
                       </div>
                       <?php
                       $flag = 0;
@@ -474,16 +481,18 @@ if($conn -> query($sql) === TRUE)
                           {
                               $file = $a->request("SELECT * FROM `file` WHERE document_id=". $request["document5_id"]);
                               //var_dump($file);
+                              $i=1;
                               if($file!= NULL)
                               {
                                   foreach($file as $littlefile):?>
 
-                                      <div ><a href="">Файл(залито <?= date("d.m.Y H:s",strtotime($littlefile["uploaded"]))?>)</a></div>
+
+                                      <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
 
 
-                                  <?php endforeach; }else echo "Нет файлов";} else echo "Документа нет в бд документ" ?>
+                                      <?php $i++; endforeach;} else echo "Нет файлов";} else echo "Документа нет в бд документов" ?>
                       </div>
                       <?php
 
@@ -541,21 +550,23 @@ if($conn -> query($sql) === TRUE)
 
                           <?php
                           $request = $a->request_array("SELECT document6_id FROM `project` WHERE student_id =". $stid["id"]);
-                         // var_dump($request );
+                          //var_dump($request );
                           if($request!= NULL)
                           {
                               $file = $a->request("SELECT * FROM `file` WHERE document_id=". $request["document6_id"]);
                               //var_dump($file);
+                              $i=1;
                               if($file!= NULL)
                               {
-                              foreach($file as $littlefile):?>
-
-                                  <div ><a href="">Файл(залито <?= date("d.m.Y H:s",strtotime($littlefile["uploaded"]))?>)</a></div>
+                                  foreach($file as $littlefile):?>
 
 
+                                      <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
-                              <?php endforeach; }else echo "Нет файлов";} else echo "Документа нет в бд документ" ?>
+
+
+                                      <?php $i++; endforeach;} else echo "Нет файлов";} else echo "Документа нет в бд документов" ?>
                       </div>
                       <?php
 
