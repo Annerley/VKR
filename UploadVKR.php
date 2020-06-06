@@ -132,7 +132,7 @@ if(isset($_FILES['image']))
             move_uploaded_file($file_tmp, $VKR.$fileNewName);
 
         }
-        else if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
+        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
         {
             throw new Exception('Load error');
         }
