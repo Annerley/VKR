@@ -393,9 +393,58 @@ if($conn -> query($sql) === TRUE)
 
                                       <?php $i++; endforeach;} else echo "Нет файлов";} else echo "Документа нет в бд документов" ?>
                       </div>
-                      <input type = "text"></input>
-                      <button> Ответить </button>
+                      <?php
+                      $flag = 0;
+                      $req = $a->request_array("SELECT document3_id FROM `project` WHERE student_id = $stid[id]");
+                      if(!empty($req))
+                      {
+                          $doc = NULL;
+                          $doc = $a->request_array("SELECT * FROM document WHERE id = $req[document3_id]");
+                          ?>
+                          <?php if ($doc["positive"] == 0): ?>
+                          <div class = "metka good">
+
+                              <?php
+                              if(!empty($doc)) {
+
+                                  echo $doc["check_answer"];
+                              }
+                              else echo "error";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
+
+                          <?php if ($doc["positive"] == 1): ?>
+                          <div class = "metka bad">
+
+                              <?php
+                              if(!empty($doc)) {
+
+                                  echo $doc["check_answer"];
+                              }
+                              else echo "error";
+                              ?>
+
+                          </div>
+                      <?php endif ?>
+                          <?php if ($doc["positive"] == 2): ?>
+                          <div class = "metka okay">
+
+                              <?php
+                              if(!empty($doc)) {
+                                  $flag = 1;
+                                  echo $doc["check_answer"];
+                              }
+
+                              else echo "error";
+                              ?>
+
+                          </div>
+                      <?php endif ;} else echo "не проверено"; ?>
                   </div>
+
+
                   <div class = "miniblock">
                       <div class = "namespace">Исх. тексты:</div>
                       <div class = "file">
