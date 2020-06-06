@@ -107,6 +107,12 @@ $VKR = "VKR/";
 
 if(isset($_FILES['image']))
 {
+    //var_dump($student);
+    $res =$p->request_array("SELECT `document3_id` FROM `project` WHERE `student_id`=".$student["id"]);
+    //echo "SELECT `document3_id` FROM `project` WHERE `student_id`=".$student["id"];
+    //var_dump($res);
+    $p->insert("UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document3_id"]);
+    $p->insert("UPDATE `document` SET positive=2 WHERE `id`=".$res["document3_id"]);
     $num = 3;
     foreach($_FILES['image']['name'] as $key => $filename)
     {
@@ -136,6 +142,9 @@ if(isset($_FILES['image']))
 }
 if(isset($_FILES['zadanie']))
 {
+    $res =$p->request_array("SELECT `document1_id` FROM `project` WHERE `student_id`=".$student["id"]);
+    $p->insert("UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document1_id"]);
+    $p->insert("UPDATE `document` SET positive=2 WHERE `id`=".$res["document1_id"]);
     $num = 1;
     foreach($_FILES['zadanie']['name'] as $key => $filename)
     {
@@ -171,6 +180,9 @@ if(isset($_FILES['zadanie']))
 
 if(isset($_FILES['text']))
 {
+    $res =$p->request_array("SELECT `document2_id` FROM `project` WHERE `student_id`=".$student["id"]);
+    $p->insert("UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document2_id"]);
+    $p->insert("UPDATE `document` SET positive=2 WHERE `id`=".$res["document2_id"]);
     $num = 2;
     foreach($_FILES['text']['name'] as $key => $filename)
     {
@@ -205,7 +217,9 @@ if(isset($_FILES['text']))
 
 if(isset($_FILES['isxodniki']))
 {
-
+    $res =$p->request_array("SELECT `document4_id` FROM `project` WHERE `student_id`=".$student["id"]);
+    $p->insert("UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document4_id"]);
+    $p->insert("UPDATE `document` SET positive=2 WHERE `id`=".$res["document4_id"]);
     $num = 4;
     foreach($_FILES['isxodniki']['name'] as $key => $filename)
     {
@@ -239,6 +253,9 @@ if(isset($_FILES['isxodniki']))
 
 if(isset($_FILES['recenziya']))
 {
+    $res =$p->request_array("SELECT `document6_id` FROM `project` WHERE `student_id`=".$student["id"]);
+    $p->insert("UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document6_id"]);
+    $p->insert("UPDATE `document` SET positive=2 WHERE `id`=".$res["document6_id"]);
     $num = 6;
     foreach($_FILES['recenziya']['name'] as $key => $filename)
     {
@@ -273,7 +290,10 @@ if(isset($_FILES['recenziya']))
 
 if(isset($_FILES['comment']))
 {
-    $num = 6;
+    $res =$p->request_array("SELECT `document5_id` FROM `project` WHERE `student_id`=".$student["id"]);
+    $p->insert("UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document5_id"]);
+    $p->insert("UPDATE `document` SET positive=2 WHERE `id`=".$res["document5_id"]);
+    $num = 5;
     foreach($_FILES['comment']['name'] as $key => $filename)
     {
         $id = ($_POST['document_id']);
