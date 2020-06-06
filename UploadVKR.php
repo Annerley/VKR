@@ -439,11 +439,18 @@ if(isset($_FILES['comment']))
             </div>
 			<div>документы проверены</div>
 		</div>
-		<div class = "text"> 
-			<div class ="progress2 fourth">
-			<div class = "pr100 space3"></div>
-		
-			</div>
+		<div class = "text">
+            <div class ="progress2 fourth">
+                <?php
+                if($student["register"] == 1):?>
+
+                    <div class = "pr100 on space3"></div>
+                <?php endif; ?>
+                <?php
+                if($student["register"] == 0):?>
+                    <div class = "pr100 space3"></div>
+                <?php endif; ?>
+            </div>
 			<div>предзащита пройдена</div>
 		</div>
 	</div>

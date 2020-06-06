@@ -183,7 +183,15 @@ if($conn -> query($sql) === TRUE)
 
               <div class = "text">
                   <div class ="progress2 fourth">
+                      <?php
+                      if($stid["register"] == 1):?>
+
                       <div class = "pr100 on space3"></div>
+                      <?php endif; ?>
+                      <?php
+                      if($stid["register"] == 0):?>
+                      <div class = "pr100 space3"></div>
+                      <?php endif; ?>
                   </div>
 
               </div>
