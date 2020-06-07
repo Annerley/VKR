@@ -209,4 +209,14 @@
 
 
 
+.cross:after
+{
+	content:"\2718";
+	color:red;
+	margin-left:3px;
 
+}
+a.cross
+{
+	text-decoration: none;
+}

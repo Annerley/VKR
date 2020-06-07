@@ -54,8 +54,36 @@ class MySQL
             //print_r($result);
             return NULL;
         }
+        $result=mysqli_insert_id($this->conn);
+        return $result;
+    }
+
+    public function deletion($str)
+    {
+        //echo $str;
+        $sql = $str;   // table documents and output
+        $result = mysqli_query($this->conn, $sql);
+        if($result === FALSE)
+        {
+            //throw new exception("db error");
+            //print_r($result);
+            return NULL;
+        }
         return TRUE;
     }
+
+    public function create_oper($id, $type) //1-insert 2-deletion
+    {
+        if($type==1)
+        {
+            $this->insert("INSERT INTO `operation`(`oper_type`, `file_id`) VALUES($type, $id)");
+        }
+        if($type==2)
+        {
+            $this->deletion("INSERT INTO `operation`(`oper_type`, `file_id`) VALUES($type, $id)");
+        }
+    }
+
 }
 ?>
 

@@ -1,6 +1,7 @@
 <?php
 
-$filename = "./VKR/".$_GET["path"];
+$filename = $_GET["path"];
+
 header('Content-Description: File Transfer');
 header('Content-Type: application/octet-stream');
 header('Content-Disposition: attachment; filename="'.basename($filename).'"');

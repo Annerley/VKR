@@ -10,18 +10,6 @@ $groups = $a->request("SELECT * FROM groups");
 $projects = $a->request("SELECT * FROM project");
 
 
-/*$sql = "INSERT INTO document (doc_type, project_id, check_answer, positive)
-		VALUES('1','2','NICETRY','1')"	;
-
-if($conn -> query($sql) === TRUE)
-{
-	echo "Record created";
-}
-
-*/ // insert in db
-
-
-
 
 ?>
 <?php
@@ -153,15 +141,28 @@ if($conn -> query($sql) === TRUE)
 
               <div class = "text">
                   <div class ="progress2 second">
+
                       <?php
+                      $progress = $a->request("SELECT `id` FROM `file` WHERE `document_id` IN ($id_docs)");
+
+                      $f=0;
+                      foreach($doc as $docs)
+                      {
+
+                          $progress = $a->request("SELECT `id` FROM `file` WHERE `document_id` IN ($docs)");
+                          if(!empty($progress))
+                              $f++;
+
+                      }
                       if ($f==6){?>
                           <div class = "pr100 on"></div>
                           <?php
                       }?>
-                      <?php //переделать
+                      <?php
                       if ($f<6){?>
                           <div class = "pr100 "></div>
                       <?php }?>
+
 
                   </div>
               </div>
@@ -227,7 +228,7 @@ if($conn -> query($sql) === TRUE)
                                   foreach($file as $littlefile):?>
 
 
-                                      <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
+                                      <div ><a href="<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
 
@@ -310,7 +311,7 @@ if($conn -> query($sql) === TRUE)
                                       foreach($file as $littlefile):?>
 
 
-                                          <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
+                                          <div ><a href="<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
 
@@ -394,7 +395,7 @@ if($conn -> query($sql) === TRUE)
                                   foreach($file as $littlefile):?>
 
 
-                                      <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
+                                      <div ><a href="<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
 
@@ -470,7 +471,7 @@ if($conn -> query($sql) === TRUE)
                                   foreach($file as $littlefile):?>
 
 
-                                      <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
+                                      <div ><a href="<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
 
@@ -544,7 +545,7 @@ if($conn -> query($sql) === TRUE)
                                   foreach($file as $littlefile):?>
 
 
-                                      <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
+                                      <div ><a href="<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
 
@@ -618,7 +619,7 @@ if($conn -> query($sql) === TRUE)
                                   foreach($file as $littlefile):?>
 
 
-                                      <div ><a href="/VKR/<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
+                                      <div ><a href="<?=$littlefile["path"]?>">Файл №<?=$i?>(залито <?= date("d.m.Y H:i",strtotime($littlefile["uploaded"]))?>)</a></div>
 
 
 

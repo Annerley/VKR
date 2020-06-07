@@ -9,25 +9,12 @@ $group_name = $p->request_array("SELECT * FROM groups WHERE id=".$group_id["grou
 
 
 
-function GetNewName($student, $num)
+function GetNewName($student, $num, $id)
 {
     $p = new MySQL;
-    $l[1] = $p->request_array("SELECT `document1_id` FROM `project` WHERE student_id=".$_GET["id"]);
-    $l[2] = $p->request_array("SELECT `document2_id` FROM `project` WHERE student_id=".$_GET["id"]);
-    $l[3] = $p->request_array("SELECT `document3_id` FROM `project` WHERE student_id=".$_GET["id"]);
-    $l[4] = $p->request_array("SELECT `document4_id` FROM `project` WHERE student_id=".$_GET["id"]);
-    $l[5] = $p->request_array("SELECT `document5_id` FROM `project` WHERE student_id=".$_GET["id"]);
-    $l[6] = $p->request_array("SELECT `document6_id` FROM `project` WHERE student_id=".$_GET["id"]);
 
-    $q[1] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[1]["document1_id"]);
-    $q[2] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[2]["document2_id"]);
-    $q[3] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[3]["document3_id"]);
-    $q[4] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[4]["document4_id"]);
-    $q[5] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[5]["document5_id"]);
-    $q[6] = $p->request_array("SELECT COUNT(*) as quantity FROM file WHERE document_id =".$l[6]["document6_id"]);
-    //echo $q[2];
-    //echo "<br>";
-    return $result =  $student["id"].$student["middle_name"]."_doc".$num."_".$q[$num]["quantity"];
+
+    return $result =  $student["id"].$student["middle_name"]."_doc".$num."_".$id;
 }
 
 function getExtension ($mime_type,$filename){
@@ -106,39 +93,37 @@ $VKR = "VKR/";
 
 if(isset($_FILES['image']))
 {
-    //var_dump($student);
+
     $res =$p->request_array("SELECT `document3_id` FROM `project` WHERE `student_id`=".$student["id"]);
-    //echo "SELECT `document3_id` FROM `project` WHERE `student_id`=".$student["id"];
-    //var_dump($res);
+
     $p->insert("UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document3_id"]);
-    //echo "UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document3_id"];
+
     $p->insert("UPDATE `document` SET positive=2 WHERE `id`=".$res["document3_id"]);
     $num = 3;
     foreach($_FILES['image']['name'] as $key => $filename)
     {
+
+
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['image']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
-        //echo $fileNewName;
-        $errors = array();
-        //echo $filename;
-        if(empty($errors) == true)
-        {
-            // echo sys_get_temp_dir();
-            // echo mime_content_type($file_tmp);
-            // echo "Success";
-            //echo getExtension(mime_content_type($file_tmp),  $filename);
-
-            move_uploaded_file($file_tmp, $VKR.$fileNewName);
-
-        }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
+        if (!($id_file = $p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'1') ")))
         {
             throw new Exception('Load error');
         }
-        //echo "\"INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$VKR.$fileNewName') \"))";
 
+        $fileNewName = GetNewName($student, $num, $id_file).".".getExtension(mime_content_type($file_tmp),  $filename);
+        $id = $p->insert("UPDATE `file` SET `path`='".$VKR.$fileNewName."' WHERE `id`=".$id_file);
+
+        $errors = array();
+        if(empty($errors) == true)
+        {
+
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
+        }
+
+        $p->create_oper($id_file, 1);
     }
+
 }
 if(isset($_FILES['zadanie']))
 {
@@ -150,68 +135,54 @@ if(isset($_FILES['zadanie']))
     {
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['zadanie']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
-        //echo $fileNewName;
-        //echo $_FILES['text']['name'][$key];
-        $errors = array();
-        //echo $filename;
-        if(empty($errors) == true)
-        {
-            // echo sys_get_temp_dir();
-            // echo mime_content_type($file_tmp);
-            // echo "Success";
-            //echo getExtension(mime_content_type($file_tmp),  $file_name);
-
-            move_uploaded_file($file_tmp, $VKR.$fileNewName);
-
-        }
-        else
-        {
-            echo "Error";
-            print $errors;
-        }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
+       if (!($id_file = $p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'1') ")))
         {
             throw new Exception('Load error');
         }
 
+        $fileNewName = GetNewName($student, $num, $id_file).".".getExtension(mime_content_type($file_tmp),  $filename);
+        $id = $p->insert("UPDATE `file` SET `path`='".$VKR.$fileNewName."' WHERE `id`=".$id_file);
+
+        $errors = array();
+        if(empty($errors) == true)
+        {
+
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
+        }
+
+        $p->create_oper($id_file, 1);
     }
+
+
 }
 
 if(isset($_FILES['text']))
 {
     $res =$p->request_array("SELECT `document2_id` FROM `project` WHERE `student_id`=".$student["id"]);
     $p->insert("UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document2_id"]);
-    echo "UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document2_id"];
+
     $p->insert("UPDATE `document` SET positive=2 WHERE `id`=".$res["document2_id"]);
     $num = 2;
     foreach($_FILES['text']['name'] as $key => $filename)
     {
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['text']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
-        //echo $_FILES['text']['name'][$key];
-        $errors = array();
-        //echo $filename;
-        if(empty($errors) == true)
-        {
-            // echo sys_get_temp_dir();
-            // echo mime_content_type($file_tmp);
-            // echo "Success";
-            //echo getExtension(mime_content_type($file_tmp),  $file_name);
-
-            move_uploaded_file($file_tmp, $VKR.$fileNewName);
-
-        }
-        else
-        {
-            echo "Error";
-            print $errors;
-        }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
+       if (!($id_file = $p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'1') ")))
         {
             throw new Exception('Load error');
         }
+
+        $fileNewName = GetNewName($student, $num, $id_file).".".getExtension(mime_content_type($file_tmp),  $filename);
+        $id = $p->insert("UPDATE `file` SET `path`='".$VKR.$fileNewName."' WHERE `id`=".$id_file);
+
+        $errors = array();
+        if(empty($errors) == true)
+        {
+
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
+        }
+
+        $p->create_oper($id_file, 1);
 
     }
 }
@@ -226,29 +197,22 @@ if(isset($_FILES['isxodniki']))
     {
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['isxodniki']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
-        //echo $_FILES['text']['name'][$key];
-        $errors = array();
-        //echo $filename;
-        if(empty($errors) == true)
-        {
-            // echo sys_get_temp_dir();
-            // echo mime_content_type($file_tmp);
-            // echo "Success";
-            //echo getExtension(mime_content_type($file_tmp),  $file_name);
-
-            move_uploaded_file($file_tmp, $VKR.$fileNewName);
-
-        }
-        else
-        {
-            echo "Error";
-            print $errors;
-        }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
+       if (!($id_file = $p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'1') ")))
         {
             throw new Exception('Load error');
         }
+
+        $fileNewName = GetNewName($student, $num, $id_file).".".getExtension(mime_content_type($file_tmp),  $filename);
+        $id = $p->insert("UPDATE `file` SET `path`='".$VKR.$fileNewName."' WHERE `id`=".$id_file);
+
+        $errors = array();
+        if(empty($errors) == true)
+        {
+
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
+        }
+        $p->create_oper($id_file, 1);
+
     }
 }
 
@@ -262,30 +226,21 @@ if(isset($_FILES['recenziya']))
     {
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['recenziya']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
-        //echo $_FILES['text']['name'][$key];
-        $errors = array();
-        //echo $filename;
-        if(empty($errors) == true)
-        {
-            // echo sys_get_temp_dir();
-            // echo mime_content_type($file_tmp);
-            // echo "Success";
-            //echo getExtension(mime_content_type($file_tmp),  $file_name);
-
-            move_uploaded_file($file_tmp, $VKR.$fileNewName);
-
-        }
-        else
-        {
-            echo "Error";
-            print $errors;
-        }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
+     if (!($id_file = $p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'1') ")))
         {
             throw new Exception('Load error');
         }
 
+        $fileNewName = GetNewName($student, $num, $id_file).".".getExtension(mime_content_type($file_tmp),  $filename);
+        $id = $p->insert("UPDATE `file` SET `path`='".$VKR.$fileNewName."' WHERE `id`=".$id_file);
+
+        $errors = array();
+        if(empty($errors) == true)
+        {
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
+        }
+
+        $p->create_oper($id_file, 1);
     }
 }
 
@@ -293,37 +248,27 @@ if(isset($_FILES['comment']))
 {
     $res =$p->request_array("SELECT `document5_id` FROM `project` WHERE `student_id`=".$student["id"]);
     $p->insert("UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document5_id"]);
-    echo "UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document5_id"];
     $p->insert("UPDATE `document` SET positive=2 WHERE `id`=".$res["document5_id"]);
     $num = 5;
     foreach($_FILES['comment']['name'] as $key => $filename)
     {
         $id = ($_POST['document_id']);
         $file_tmp =$_FILES['comment']['tmp_name'][$key];
-        $fileNewName = GetNewName($student, $num).".".getExtension(mime_content_type($file_tmp),  $filename);
-        //echo $_FILES['text']['name'][$key];
-        $errors = array();
-        //echo $filename;
-        if(empty($errors) == true)
-        {
-            // echo sys_get_temp_dir();
-            // echo mime_content_type($file_tmp);
-            // echo "Success";
-            //echo getExtension(mime_content_type($file_tmp),  $file_name);
-
-            move_uploaded_file($file_tmp, $VKR.$fileNewName);
-
-        }
-        else
-        {
-            echo "Error";
-            print $errors;
-        }
-        if (empty($p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'$fileNewName') ")))
+       if (!($id_file = $p->insert("INSERT INTO `file`(`document_id`, `path`) VALUES ($id,'1') ")))
         {
             throw new Exception('Load error');
         }
 
+        $fileNewName = GetNewName($student, $num, $id_file).".".getExtension(mime_content_type($file_tmp),  $filename);
+        $id = $p->insert("UPDATE `file` SET `path`='".$VKR.$fileNewName."' WHERE `id`=".$id_file);
+
+        $errors = array();
+        if(empty($errors) == true)
+        {
+            move_uploaded_file($file_tmp, $VKR.$fileNewName);
+        }
+
+        $p->create_oper($id_file, 1);
     }
 }
 ?>
@@ -360,7 +305,7 @@ if(isset($_FILES['comment']))
                 $f=0;
                 if(empty($doc))
                 {
-                    //echo "Документ не существует";
+                    echo "Документ не существует";
                     ?>
                     <div class = "square"></div>
                     <div class = "square"></div>
@@ -381,13 +326,13 @@ if(isset($_FILES['comment']))
 
 
                     }
-                    //var_dump($id_docs);
+
                     $progress = $p->request("SELECT * FROM `document` WHERE `id` IN ($id_docs)");
-                    //var_dump($progress);
+
 
                     for($i = 0; $i < 6; $i++)
                     {
-                        //echo $progress[$i]["positive"];
+
 
                         if($progress[$i]["positive"] == 0){
                             $f++;
@@ -411,17 +356,29 @@ if(isset($_FILES['comment']))
 		<div class = "text">
 			<div class ="progress2 second">
                 <?php
-                if ($f==6){?>
+
+
+                $i=0;
+                foreach($doc as $docs)
+                {
+
+                    $progress = $p->request("SELECT `id` FROM `file` WHERE `document_id` IN ($docs)");
+                    if(!empty($progress))
+                        $i++;
+
+                }
+                if ($i==6){?>
                     <div class = "pr100 on"></div>
                     <?php
                 }?>
-                <?php //переделать
-                if ($f<6){?>
-                    <div class = "pr100"></div>
+                <?php
+                if ($i<6){?>
+                    <div class = "pr100 "></div>
                 <?php }?>
 
 
-			</div>
+
+            </div>
 			<div>документы собраны</div>
 		</div>
 		<div class = "text"> 
@@ -475,7 +432,8 @@ if(isset($_FILES['comment']))
 
                     <?php
                     foreach($file as $minifile):?>
-                        <div><a href ="/download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="/VKR/<?=$minifile?>">Открыть</a></div>
+
+                        <div><a href ="download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="<?=$minifile?>">Открыть</a></div>
 
                 <?php $i++; endforeach; ?>
                 <?php endforeach; ?>
@@ -490,8 +448,6 @@ if(isset($_FILES['comment']))
                 <?php
                 $proj = $p->request_array("SELECT `document1_id` FROM project WHERE student_id =".$student["id"]);
                 $doc = $p->request_array("SELECT `check_answer`, `positive`, `id` FROM document WHERE id = ". $proj["document1_id"]);
-                //echo $doc["positive"];
-                //echo $doc["check_answer"];
                 if($doc["positive"] == 0): ?>
                     <div class = "result good">
                         <div><?=$doc["check_answer"]?></div>
@@ -513,11 +469,11 @@ if(isset($_FILES['comment']))
 
 
                 <?php endif ?>
-                <form action="/upload_message.php" method="post">
+                <form action="upload_message.php" method="post">
                     <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                     <input type="submit" class ="button_good" value = "Проверено" name="mark_good">
                 </form>
-                <form action="/upload_message.php" method="post">
+                <form action="upload_message.php" method="post">
                     <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                     <input class = "input" type = "text" name = "text">
                     <input type="submit" class ="button_bad" value = "Замечание" name = "mark_bad">
@@ -537,7 +493,7 @@ if(isset($_FILES['comment']))
 
                     <?php
                     foreach($file as $minifile):?>
-                        <div><a href ="/download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="/VKR/<?=$minifile?>">Открыть</a></div>
+                        <div><a href ="download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="<?=$minifile?>">Открыть</a></div>
 
                         <?php $i++; endforeach; ?>
                 <?php endforeach; ?>
@@ -552,8 +508,7 @@ if(isset($_FILES['comment']))
                 <?php
                 $proj = $p->request_array("SELECT `document2_id` FROM project WHERE student_id =".$student["id"]);
                 $doc = $p->request_array("SELECT `check_answer`, `positive`, `id` FROM document WHERE id = ". $proj["document2_id"]);
-                //echo $doc["positive"];
-                //echo $doc["check_answer"];
+
                 if($doc["positive"] == 0): ?>
                     <div class = "result good">
                         <div><?=$doc["check_answer"]?></div>
@@ -575,11 +530,11 @@ if(isset($_FILES['comment']))
 
 
                 <?php endif ?>
-                <form action="/upload_message.php" method="post">
+                <form action="upload_message.php" method="post">
                     <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                     <input type="submit" class ="button_good" value = "Проверено" name="mark_good">
                 </form>
-                <form action="/upload_message.php" method="post">
+                <form action="upload_message.php" method="post">
                     <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                     <input class = "input" type = "text" name = "text">
                     <input type="submit" class ="button_bad" value = "Замечание" name = "mark_bad">
@@ -599,7 +554,7 @@ if(isset($_FILES['comment']))
 
                     <?php
                     foreach($file as $minifile):?>
-                        <div><a href ="/download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="/VKR/<?=$minifile?>">Открыть</a></div>
+                        <div><a href ="download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="<?=$minifile?>">Открыть</a></div>
 
                         <?php $i++; endforeach; ?>
                 <?php endforeach; ?>
@@ -614,8 +569,6 @@ if(isset($_FILES['comment']))
                 <?php
                 $proj = $p->request_array("SELECT `document3_id` FROM project WHERE student_id =".$student["id"]);
                 $doc = $p->request_array("SELECT `check_answer`, `positive`, `id` FROM document WHERE id = ". $proj["document3_id"]);
-                //echo $doc["positive"];
-                //echo $doc["check_answer"];
                 if($doc["positive"] == 0): ?>
                 <div class = "result good">
                     <div><?=$doc["check_answer"]?></div>
@@ -637,11 +590,11 @@ if(isset($_FILES['comment']))
 
 
                             <?php endif ?>
-                            <form action="/upload_message.php" method="post">
+                            <form action="upload_message.php" method="post">
                                 <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                                 <input type="submit" class ="button_good" value = "Проверено" name="mark_good">
                             </form>
-                            <form action="/upload_message.php" method="post">
+                            <form action="upload_message.php" method="post">
                                 <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                                 <input class = "input" type = "text" name = "text">
                                 <input type="submit" class ="button_bad" value = "Замечание" name = "mark_bad">
@@ -662,7 +615,7 @@ if(isset($_FILES['comment']))
 
                     <?php
                     foreach($file as $minifile):?>
-                        <div><a href ="/download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="/VKR/<?=$minifile?>">Открыть</a></div>
+                        <div><a href ="download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="<?=$minifile?>">Открыть</a></div>
 
                         <?php $i++; endforeach; ?>
                 <?php endforeach; ?>
@@ -677,8 +630,6 @@ if(isset($_FILES['comment']))
                 <?php
                 $proj = $p->request_array("SELECT `document4_id` FROM project WHERE student_id =".$student["id"]);
                 $doc = $p->request_array("SELECT `check_answer`, `positive`, `id` FROM document WHERE id = ". $proj["document4_id"]);
-                //echo $doc["positive"];
-                //echo $doc["check_answer"];
                 if($doc["positive"] == 0): ?>
                 <div class = "result good">
                     <div><?=$doc["check_answer"]?></div>
@@ -700,11 +651,11 @@ if(isset($_FILES['comment']))
 
 
                             <?php endif ?>
-                            <form action="/upload_message.php" method="post">
+                            <form action="upload_message.php" method="post">
                                 <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                                 <input type="submit" class ="button_good" value = "Проверено" name="mark_good">
                             </form>
-                            <form action="/upload_message.php" method="post">
+                            <form action="upload_message.php" method="post">
                                 <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                                 <input class = "input" type = "text" name = "text">
                                 <input type="submit" class ="button_bad" value = "Замечание" name = "mark_bad">
@@ -724,7 +675,7 @@ if(isset($_FILES['comment']))
 
                     <?php
                     foreach($file as $minifile):?>
-                        <div><a href ="/download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="/VKR/<?=$minifile?>">Открыть</a></div>
+                        <div><a href ="download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="<?=$minifile?>">Открыть</a></div>
 
                         <?php $i++; endforeach; ?>
                 <?php endforeach; ?>
@@ -739,8 +690,7 @@ if(isset($_FILES['comment']))
                 <?php
                 $proj = $p->request_array("SELECT `document5_id` FROM project WHERE student_id =".$student["id"]);
                 $doc = $p->request_array("SELECT `check_answer`, `positive`, `id` FROM document WHERE id = ". $proj["document5_id"]);
-                //echo $doc["positive"];
-                //echo $doc["check_answer"];
+
                 if($doc["positive"] == 0): ?>
                 <div class = "result good">
                     <div><?=$doc["check_answer"]?></div>
@@ -762,11 +712,11 @@ if(isset($_FILES['comment']))
 
 
                             <?php endif ?>
-                            <form action="/upload_message.php" method="post">
+                            <form action="upload_message.php" method="post">
                                 <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                                 <input type="submit" class ="button_good" value = "Проверено" name="mark_good">
                             </form>
-                            <form action="/upload_message.php" method="post">
+                            <form action="upload_message.php" method="post">
                                 <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                                 <input class = "input" type = "text" name = "text">
                                 <input type="submit" class ="button_bad" value = "Замечание" name = "mark_bad">
@@ -786,7 +736,7 @@ if(isset($_FILES['comment']))
 
                     <?php
                     foreach($file as $minifile):?>
-                        <div><a href ="/download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="/VKR/<?=$minifile?>">Открыть</a></div>
+                        <div><a href ="download.php?path=<?=$minifile?>">Файл <?=$i?> Скачать</a> <a href ="<?=$minifile?>">Открыть</a></div>
 
                         <?php $i++; endforeach; ?>
                 <?php endforeach; ?>
@@ -801,8 +751,7 @@ if(isset($_FILES['comment']))
                 <?php
                 $proj = $p->request_array("SELECT `document6_id` FROM project WHERE student_id =".$student["id"]);
                 $doc = $p->request_array("SELECT `check_answer`, `positive`, `id` FROM document WHERE id = ". $proj["document6_id"]);
-                //echo $doc["positive"];
-                //echo $doc["check_answer"];
+
                 if($doc["positive"] == 0): ?>
                 <div class = "result good">
                     <div><?=$doc["check_answer"]?></div>
@@ -824,11 +773,11 @@ if(isset($_FILES['comment']))
 
 
                             <?php endif ?>
-                            <form action="/upload_message.php" method="post">
+                            <form action="upload_message.php" method="post">
                                 <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                                 <input type="submit" class ="button_good" value = "Проверено" name="mark_good">
                             </form>
-                            <form action="/upload_message.php" method="post">
+                            <form action="upload_message.php" method="post">
                                 <input type="hidden" value="<?=$doc["id"]?>" name="doc_id">
                                 <input class = "input" type = "text" name = "text">
                                 <input type="submit" class ="button_bad" value = "Замечание" name = "mark_bad">
