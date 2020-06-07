@@ -128,6 +128,7 @@ if(isset($_FILES['zadanie']))
     $res =$p->request_array("SELECT `document1_id` FROM `project` WHERE `student_id`=".$student["id"]);
     $p->insert("UPDATE `document` SET check_answer='Не проверено' WHERE `id`=".$res["document1_id"]);
     $p->insert("UPDATE `document` SET positive=2 WHERE `id`=".$res["document1_id"]);
+
     $num = 1;
     foreach($_FILES['zadanie']['name'] as $key => $filename)
     {
@@ -145,7 +146,7 @@ if(isset($_FILES['zadanie']))
         $errors = array();
         if(empty($errors) == true)
         {
-            echo "$VKR"."$fileNewName";
+
             move_uploaded_file($file_tmp, $VKR.$fileNewName);
         }
         $p->create_oper($id_file, 1);
@@ -174,7 +175,7 @@ if(isset($_FILES['text']))
         $errors = array();
         if(empty($errors) == true)
         {
-            echo "$VKR"."$fileNewName";
+
             move_uploaded_file($file_tmp, $VKR.$fileNewName);
         }
         $p->create_oper($id_file, 1);
@@ -202,7 +203,7 @@ if(isset($_FILES['isxodniki']))
         $errors = array();
         if(empty($errors) == true)
         {
-            echo "$VKR"."$fileNewName";
+
             move_uploaded_file($file_tmp, $VKR.$fileNewName);
         }
         $p->create_oper($id_file, 1);
@@ -230,7 +231,7 @@ if(isset($_FILES['recenziya']))
         $errors = array();
         if(empty($errors) == true)
         {
-            echo "$VKR"."$fileNewName";
+
             move_uploaded_file($file_tmp, $VKR.$fileNewName);
         }
         $p->create_oper($id_file, 1);
@@ -259,7 +260,7 @@ if(isset($_FILES['comment']))
         $errors = array();
         if(empty($errors) == true)
         {
-            echo "$VKR"."$fileNewName";
+
             move_uploaded_file($file_tmp, $VKR.$fileNewName);
         }
 
@@ -440,7 +441,7 @@ if(isset($_FILES['comment']))
                 <?php endforeach; ?>
                 <?php $proj = $p->request_array("SELECT `document1_id` FROM project WHERE student_id =".$student["id"]); ?>
                 <form action="" method="post" enctype="multipart/form-data">
-                    <input type = "file" multiple name="image[]">
+                    <input type = "file" multiple name="zadanie[]">
                     <input value = "<?=$proj['document1_id']?>" type="hidden" name ="document_id">
 
                     <input type = "submit">
@@ -503,7 +504,7 @@ if(isset($_FILES['comment']))
                 <?php endforeach; ?>
                 <?php $proj = $p->request_array("SELECT `document2_id` FROM project WHERE student_id =".$student["id"]); ?>
                 <form action="" method="post" enctype="multipart/form-data">
-                    <input type = "file" multiple name="image[]">
+                    <input type = "file" multiple name="text[]">
                     <input value = "<?=$proj['document2_id']?>" type="hidden" name ="document_id">
 
                     <input type = "submit">
@@ -625,7 +626,7 @@ if(isset($_FILES['comment']))
                 <?php endforeach; ?>
                 <?php $proj = $p->request_array("SELECT `document4_id` FROM project WHERE student_id =".$student["id"]); ?>
                 <form action="" method="post" enctype="multipart/form-data">
-                    <input type = "file" multiple name="image[]">
+                    <input type = "file" multiple name="isxodniki[]">
                     <input value = "<?=$proj['document4_id']?>" type="hidden" name ="document_id">
 
                     <input type = "submit">
@@ -686,8 +687,8 @@ if(isset($_FILES['comment']))
                 <?php endforeach; ?>
                 <?php $proj = $p->request_array("SELECT `document5_id` FROM project WHERE student_id =".$student["id"]); ?>
                 <form action="" method="post" enctype="multipart/form-data">
-                    <input type = "file" multiple name="image[]">
-                    <input value = "<?=$proj['document3_id']?>" type="hidden" name ="document_id">
+                    <input type = "file" multiple name="comment[]">
+                    <input value = "<?=$proj['document5_id']?>" type="hidden" name ="document_id">
 
                     <input type = "submit">
                 </form>
@@ -747,8 +748,8 @@ if(isset($_FILES['comment']))
                 <?php endforeach; ?>
                 <?php $proj = $p->request_array("SELECT `document6_id` FROM project WHERE student_id =".$student["id"]); ?>
                 <form action="" method="post" enctype="multipart/form-data">
-                    <input type = "file" multiple name="image[]">
-                    <input value = "<?=$proj['document3_id']?>" type="hidden" name ="document_id">
+                    <input type = "file" multiple name="recenziya[]">
+                    <input value = "<?=$proj['document6_id']?>" type="hidden" name ="document_id">
 
                     <input type = "submit">
                 </form>
